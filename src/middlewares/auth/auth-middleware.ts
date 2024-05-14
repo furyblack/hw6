@@ -1,4 +1,5 @@
 import {NextFunction, Response, Request} from 'express';
+import {jwtService} from "../../application/jwt-service";
 
 const login1 = 'admin'
 const password1 = 'qwerty'
@@ -8,7 +9,16 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         res.sendStatus(401)
         return
     }
-    return next()
+
+    const  token =req.headers.authorization?.split(' ')[1]
+    const userId = await jwtService.getUserIdByToken(token)
+    if(userId){
+        req.user = await usersService.findUsersById(userId)
+        next()
+
+    }
+    res.send(401)
+    return
 }
 
     //OR
