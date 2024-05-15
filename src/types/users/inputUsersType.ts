@@ -4,6 +4,7 @@ export type CreateNewUserType= {
     "email": string
 }
 
+
 export type LoginUserType= {
     "loginOrEmail": string,
     "password": string,

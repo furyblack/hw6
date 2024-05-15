@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt';
 import {UserOutputType} from "../types/users/outputUserType";
 import {UsersRepository} from "../repositories/users-repository";
-import {UserMongoDbType} from "../types/users/inputUsersType";
+import { UserMongoDbType} from "../types/users/inputUsersType";
+import {WithId} from "mongodb";
+
 
 export const UsersService = {
     async createUser(login: string, email:string, password:string): Promise<UserOutputType>{
@@ -30,16 +32,17 @@ export const UsersService = {
         return hash
     },
     async checkCredentials(loginOrEmail: string, password: string){
-        const user:UserMongoDbType | null = await UsersRepository.findByLoginOrEmail(loginOrEmail)
-        if(!user) return false
+        const user:WithId<UserMongoDbType> | null = await UsersRepository.findByLoginOrEmail(loginOrEmail)
+        if(!user) return null
         const passwordHash = await this._generateHash(password, user.passwordSalt)
         if(user.passwordHash !== passwordHash){
-            return false
+           return  null
         }
-        return true
+        return user
     },
 
     async deleteUser(id: string):Promise<boolean>{
         return await UsersRepository.deleteUser(id)
-    }
+    },
+
 }

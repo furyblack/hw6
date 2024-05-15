@@ -7,6 +7,7 @@ export type UserViewType = {
     "createdAt": Date
 }
 
+
 export type UserOutputType = {
     "id": string,
     "login": string,

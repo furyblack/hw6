@@ -4,7 +4,7 @@ import {postRoute} from "./routes/post-route";
 import {blogRoute} from "./routes/blog-route";
 import {usersRouter} from "./routes/users-router";
 import {authRouter} from "./routes/auth-router";
-import {feedbacksRouter} from "./routes/feedbacks-router";
+import {commentRouter} from "./routes/comment-router";
 
 export const app = express();
 
@@ -14,7 +14,7 @@ app.use('/posts', postRoute)
 app.use('/blogs', blogRoute)
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
-app.use('/auth', feedbacksRouter)
+app.use('/comments', commentRouter)
 
 app.delete('/testing/all-data', async (req:Request, res: Response)=>{
     await blogCollection.deleteMany({})
@@ -23,9 +23,7 @@ app.delete('/testing/all-data', async (req:Request, res: Response)=>{
     res.sendStatus(204)
 })
 
-export const settings = {
-    JWT_SECRET: process.env.JWT_SECRET || "546123155"
-}
+
 
 
 
