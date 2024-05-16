@@ -1,5 +1,5 @@
 
-export type CreateNewPostType= {
+export type CreateNewPostType = {
     "title": string,
     "shortDescription": string,
     "content": string,

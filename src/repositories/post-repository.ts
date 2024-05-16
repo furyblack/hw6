@@ -1,9 +1,10 @@
 import { postCollection} from "../db/db";
-import {CreateNewPostType, UpdatePostType} from "../types/posts/input";
+import { CreateNewPostType, UpdatePostType} from "../types/posts/input";
 import {PostOutputType, PostMongoDbType} from "../types/posts/output";
 import * as crypto from "crypto";
 import {QueryPostRepository} from "./query-post-repository";
 import {QueryBlogRepository} from "./query-blog-repository";
+import {QueryCommentRepository} from "./query-comment-repository";
 
 
 export class PostMapper{
@@ -41,6 +42,25 @@ export class PostRepository{
 
         return PostMapper.toDto(newPost)
     }
+    // static async createComment(postParams: CreateNewCommentType): Promise<CommentOutputType | null>{
+    //     const targetComment = await QueryCommentRepository.getById()
+    //     if (!targetBlog){
+    //         return null
+    //     }
+    //     const newPost:PostMongoDbType ={
+    //         _id: crypto.randomUUID(),
+    //         title: postParams.title,
+    //         shortDescription: postParams.shortDescription,
+    //         content: postParams.content,
+    //         blogId: postParams.blogId,
+    //         blogName: targetBlog.name,
+    //         createdAt: new Date()
+    //     }
+    //     await postCollection.insertOne(newPost)
+    //
+    //
+    //     return PostMapper.toDto(newPost)
+    // }
 
 
     static async  updatePost(postId: string,  updateData:UpdatePostType): Promise<boolean | null>{

@@ -5,7 +5,7 @@ import {UserMongoDbType} from "../types/users/inputUsersType";
 
 export const jwtService={
     async  createJWT(user:WithId<UserMongoDbType>){
-        const token = jwt.sign({userId:user._id}, process.env.JWT_SECRET as string, {expiresIn:'1h'})
+        const token = jwt.sign({userId:user._id}, process.env.JWT_SECRET as string, {expiresIn: '1h'})
         return token
 
     },

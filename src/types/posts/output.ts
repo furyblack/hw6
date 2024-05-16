@@ -10,6 +10,8 @@ export type PostOutputType = {
 
 }
 
+
+
 export type PostMongoDbType =  {
     "_id": string,
     "title": string,

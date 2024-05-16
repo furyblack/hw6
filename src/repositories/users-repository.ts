@@ -24,4 +24,13 @@ export class UsersRepository{
             return false
         }
     }
+    static async findUserById(id:string): Promise<WithId<UserMongoDbType> |null>{
+        try{
+            const result = await usersCollection.findOne({_id:new ObjectId(id)})
+            return result
+        }catch (error){
+            console.error("Error deleting user", error)
+            return null
+        }
+    }
 }
