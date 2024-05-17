@@ -1,14 +1,8 @@
 import {Response, Router} from "express";
-import {authMiddleware, authMiddlewareBearer} from "../middlewares/auth/auth-middleware";
-import {postValidation} from "../validators/post-validators";
+import {authMiddlewareBearer} from "../middlewares/auth/auth-middleware";
 import {RequestWithBody} from "../types/common";
-import {CreateNewPostType} from "../types/posts/input";
-import {PostOutputType} from "../types/posts/output";
-import {PostRepository} from "../repositories/post-repository";
-import {postRoute} from "./post-route";
 import {CreateNewCommentType} from "../types/comment/input-comment-type";
 import {CommentOutputType} from "../types/comment/output-comment-type";
-import {CommentRepository} from "../repositories/comment-repository";
 import {CommentService} from "../domain/comment-service";
 
 
@@ -22,9 +16,8 @@ commentRouter.post('/', authMiddlewareBearer, async (req: RequestWithBody<Create
                 res.sendStatus(404)
                 return
         }
-        res.status(201).send(addResult)
+        res.status(200).send(addResult)
         })
 commentRouter.get('/', async (req, res)=>{
-
 
 })

@@ -1,6 +1,5 @@
 import {NextFunction, Response, Request} from 'express';
 import {jwtService} from "../../application/jwt-service";
-import {UsersService} from "../../domain/users-service";
 import {UsersRepository} from "../../repositories/users-repository";
 
 
@@ -29,7 +28,7 @@ export const authMiddlewareBearer = async (req:Request,res:Response,next:NextFun
         return
 
     }
-    res.send(401)
+    res.sendStatus(401)
     return
 }
 

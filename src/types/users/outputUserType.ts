@@ -1,12 +1,9 @@
-
-
-export type UserViewType = {
-    "id": string,
+export type CurrentUserType = {
     "login": string,
     "email": string,
-    "createdAt": Date
-}
+    "userId": string
 
+}
 
 export type UserOutputType = {
     "id": string,
@@ -14,17 +11,6 @@ export type UserOutputType = {
     "email": string,
     "createdAt": string
 }
-
-export type UserMongoDbType =  {
-
-    "name": string,
-    "description": string,
-    "websiteUrl": string,
-    "createdAt": Date
-}
-
-
-
 
 export type userSortData = {
     pageSize: number,

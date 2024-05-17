@@ -1,4 +1,3 @@
-import {CreateNewCommentType} from "../types/comment/input-comment-type";
 import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
 import {WithId} from "mongodb";
 import {commentCollection} from "../db/db";

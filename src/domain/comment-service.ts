@@ -1,8 +1,7 @@
 import {CreateNewCommentType} from "../types/comment/input-comment-type";
 import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
 import {WithId} from "mongodb";
-import {commentCollection} from "../db/db";
-import {CommentMapper, CommentRepository} from "../repositories/comment-repository";
+import {CommentRepository} from "../repositories/comment-repository";
 import {UserMongoDbType} from "../types/users/inputUsersType";
 
 
@@ -11,6 +10,7 @@ export class CommentService{
         const {content, user} = data
 
         const newComment:CommentMongoDbType={
+            postId,
             content: content,
             commentatorInfo: {
                 userId: user._id.toString(),

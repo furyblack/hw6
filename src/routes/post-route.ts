@@ -1,13 +1,17 @@
-import {authMiddleware} from "../middlewares/auth/auth-middleware";
-import {RequestWithBody, RequestWithQuery} from "../types/common";
+import {authMiddleware, authMiddlewareBearer} from "../middlewares/auth/auth-middleware";
+import {RequestWithBody, RequestWithParamsAndBody, RequestWithQuery} from "../types/common";
 import {Request, Response, Router} from "express";
 import {PostOutputType} from "../types/posts/output";
 import {CreateNewPostType, postQuerySortData, UpdatePostType} from "../types/posts/input";
 import {PostRepository} from "../repositories/post-repository";
-import {postValidation} from "../validators/post-validators";
+import {commentForPostValidation, postValidation} from "../validators/post-validators";
 import {QueryPostRepository} from "../repositories/query-post-repository";
 import {paginator} from "../types/paginator/pagination";
 import {PaginationOutputType} from "../types/blogs/output";
+import {CommentOutputType} from "../types/comment/output-comment-type";
+import {CreateNewCommentType} from "../types/comment/input-comment-type";
+import {PostService} from "../domain/posts-service";
+import {CommentService} from "../domain/comment-service";
 
 
 export const postRoute = Router({})
@@ -35,6 +39,16 @@ postRoute.post('/', authMiddleware, postValidation(), async (req: RequestWithBod
         return
     }
     res.status(201).send(addResult)
+})
+postRoute.post("/:postId/comments", authMiddlewareBearer, commentForPostValidation(), async (req:RequestWithParamsAndBody<{
+    postId: string
+},CreateNewCommentType >, res: Response<CommentOutputType>)=>{
+    const {postId}=req.params;
+    const {content}= req.body;
+    const newComment =  await CommentService.createComment({content, postId})
+    //отправляем успешный ответ с созданным коментом
+    if(!newComment) return res.sendStatus(404)
+    res.status(201).send(newComment)
 })
 
 postRoute.put('/:id', authMiddleware, postValidation(), async (req:Request, res: Response)=> {

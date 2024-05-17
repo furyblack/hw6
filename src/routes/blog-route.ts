@@ -77,7 +77,6 @@ blogRoute.post('/:blogId/posts', authMiddleware, postForBlogValidation(), async 
     const {blogId} = req.params;
     const {title, shortDescription, content} = req.body;
     const newPost = await BlogsService.createPostToBlog({title, shortDescription, content, blogId})
-    console.log(newPost)
     // Отправляем успешный ответ с созданным постом
     if (!newPost) return res.sendStatus(404)
     res.status(201).send(newPost);

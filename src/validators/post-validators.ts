@@ -17,6 +17,12 @@ const contentValidator = body('content').isString().withMessage('content must be
     max: 1000
 }).withMessage('Incorrect Content')
 
+const commentValidator = body('content').isString().withMessage('content must be a string').trim().isLength({
+    min: 20,
+    max: 300
+})
+
+
 export const postIdValidator = body('blogId').isString().custom  (async (value:string) => {
     const blog = await QueryBlogRepository.getById(value);
     console.log(blog)
@@ -31,4 +37,4 @@ export const postIdValidator = body('blogId').isString().custom  (async (value:s
 export const postValidation = () =>[titleValidator, shortDescriptionValidator, contentValidator, postIdValidator, inputValidationMiddleware]
 export const postForBlogValidation = () =>[titleValidator, shortDescriptionValidator, contentValidator, inputValidationMiddleware]
 
-
+export const commentForPostValidation = ()=>[commentValidator, inputValidationMiddleware]

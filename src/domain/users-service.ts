@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import {UserOutputType} from "../types/users/outputUserType";
+import {CurrentUserType, UserOutputType} from "../types/users/outputUserType";
 import {UsersRepository} from "../repositories/users-repository";
 import { UserMongoDbType} from "../types/users/inputUsersType";
 import {WithId} from "mongodb";
@@ -44,6 +44,9 @@ export const UsersService = {
     async deleteUser(id: string):Promise<boolean>{
         return await UsersRepository.deleteUser(id)
     },
+    //  async getCurrentUser(userId: string): Promise<CurrentUserType | null> {
+    //     return await UsersRepository.findUserById(userId);
+    // }
 
 
 }
