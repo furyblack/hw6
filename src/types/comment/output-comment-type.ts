@@ -6,7 +6,6 @@ export type CommentOutputType = {
         "userLogin": string
     },
     "createdAt": string
-
 }
 
 export type CommentMongoDbType =  {

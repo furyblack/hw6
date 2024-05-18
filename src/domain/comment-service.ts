@@ -1,25 +1,35 @@
-import {CreateNewCommentType} from "../types/comment/input-comment-type";
-import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
-import {WithId} from "mongodb";
+import {CommentMongoDbType} from "../types/comment/output-comment-type";
 import {CommentRepository} from "../repositories/comment-repository";
-import {UserMongoDbType} from "../types/users/inputUsersType";
+import {PostRepository} from "../repositories/post-repository";
 
-
+type CreateCommentServiceType ={
+    postId:string,
+    content:string,
+    userId:string,
+    userLogin:string,
+}
 export class CommentService{
-    static async createComment(data: CreateNewCommentType & {user: WithId<UserMongoDbType>}){
-        const {content, user} = data
+    static async createComment(data: CreateCommentServiceType):Promise<{commentId:string}|null>{
+        const {postId,content,userLogin,userId} = data
+
+        const post= await PostRepository.findPostById(postId)
+        if(!post) return null
+
 
         const newComment:CommentMongoDbType={
-            postId,
+            postId:postId,
             content: content,
             commentatorInfo: {
-                userId: user._id.toString(),
-                userLogin: user.userName
+                userId: userId,
+                userLogin: userLogin,
             },
             createdAt: new Date()
         }
 
-        const createdComment:CommentOutputType = await CommentRepository.createComment(newComment)
-        return createdComment
+
+        return   await CommentRepository.createComment(newComment)
+
     }
+
+
 }

@@ -36,23 +36,5 @@ export class PostService{
 
     }
 
-    static async createComment(data: CreateNewCommentType){
-        const {content, postId} =data
-
-        const newComment:CommentOutputType|null =await CommentRepository.createComment({
-            content,
-            commentatorInfo,
-            postId,
-
-            "id": "string",
-            "content": "string",
-            "commentatorInfo": {
-                "userId": "string",
-                "userLogin": "string"
-            },
-            "createdAt": "2024-05-17T12:49:14.985Z"
-        }
-        });
-    }
 
 }

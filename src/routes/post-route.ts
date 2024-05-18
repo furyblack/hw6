@@ -12,6 +12,7 @@ import {CommentOutputType} from "../types/comment/output-comment-type";
 import {CreateNewCommentType} from "../types/comment/input-comment-type";
 import {PostService} from "../domain/posts-service";
 import {CommentService} from "../domain/comment-service";
+import {QueryCommentRepository} from "../repositories/query-comment-repository";
 
 
 export const postRoute = Router({})
@@ -40,15 +41,22 @@ postRoute.post('/', authMiddleware, postValidation(), async (req: RequestWithBod
     }
     res.status(201).send(addResult)
 })
-postRoute.post("/:postId/comments", authMiddlewareBearer, commentForPostValidation(), async (req:RequestWithParamsAndBody<{
+postRoute.post("/:postId/comments", authMiddlewareBearer, commentForPostValidation(), async (req: RequestWithParamsAndBody<{
     postId: string
 },CreateNewCommentType >, res: Response<CommentOutputType>)=>{
-    const {postId}=req.params;
-    const {content}= req.body;
-    const newComment =  await CommentService.createComment({content, postId})
-    //отправляем успешный ответ с созданным коментом
-    if(!newComment) return res.sendStatus(404)
-    res.status(201).send(newComment)
+
+    const postId=req.params.postId;
+    const content= req.body.content;
+    const userId=req.userDto._id.toString();
+    const userLogin=req.userDto.userName;
+
+    const createResult =  await CommentService.createComment({content, postId,userId,userLogin })
+    //если поста нет то 404
+    if(!createResult) return res.sendStatus(404)
+
+    const createdComment = await QueryCommentRepository.getById(createResult.commentId)
+
+    return  res.status(201).send(createdComment!)
 })
 
 postRoute.put('/:id', authMiddleware, postValidation(), async (req:Request, res: Response)=> {

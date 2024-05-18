@@ -1,15 +1,17 @@
 import {BlogMongoDbType, BlogOutputType} from "../types/blogs/output";
 import {ObjectId, WithId} from "mongodb";
-import {blogCollection} from "../db/db";
+import {blogCollection, commentCollection} from "../db/db";
 import {BlogMapper} from "./blog-repository";
+import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
+import {CommentMapper} from "./comment-repository";
 
 export class QueryCommentRepository {
 
-    static async getById(id: string): Promise<BlogOutputType | null> {
-        const blog: WithId<BlogMongoDbType> | null = await blogCollection.findOne({_id: new ObjectId(id)})
-        if (!blog) {
+    static async getById(id: string): Promise<CommentOutputType | null> {
+        const comment: WithId<CommentMongoDbType> | null = await commentCollection.findOne({_id: new ObjectId(id)})
+        if (!comment) {
             return null
         }
-        return BlogMapper.toDto(blog)
+        return CommentMapper.toDto(comment)
     }
 }

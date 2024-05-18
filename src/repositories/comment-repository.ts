@@ -1,6 +1,9 @@
 import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
 import {WithId} from "mongodb";
 import {commentCollection} from "../db/db";
+import {CreateNewCommentType} from "../types/comment/input-comment-type";
+import {QueryPostRepository} from "./query-post-repository";
+import * as crypto from "crypto";
 
 
 
@@ -16,12 +19,11 @@ export class CommentMapper {
 }
 
 export class CommentRepository {
-    static async createComment(comment:CommentMongoDbType):Promise<CommentOutputType>{
-        const result = await commentCollection.insertOne(comment)
+    static async createComment(commentParams:CommentMongoDbType):Promise<{commentId: string}>{
+
+        const cteatedCommentData  = await commentCollection.insertOne(commentParams)
         return {
-            ...comment,
-            id: result.insertedId.toString(),
-            createdAt: comment.createdAt.toISOString()
+            commentId: cteatedCommentData.insertedId.toString(),
         }
     }
 }
