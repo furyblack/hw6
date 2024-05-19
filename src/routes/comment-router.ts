@@ -19,18 +19,19 @@ const commentId = await QueryCommentRepository.getById(req.params.id)
         res.sendStatus(404)
     }
 })
-// commentRouter.put('/:id', authMiddlewareBearer, commentForPostValidation(), async (req: Request, res: Response)) =>{
-//     const commentUpdateParams: UpdateCommentType={
-//         content: req.body.content
-//     }
-//     const commentId = req.params.id
-//     const isUpdated = await CommentRepository.updateComment(commentId, commentUpdateParams)
-//     if(isUpdated){
-//         return res.sendStatus(204)
-//     }else{
-//         return  res.sendStatus(404)
-//     }
-// }
+
+commentRouter.put('/:id', authMiddlewareBearer, commentForPostValidation(), async (req: Request, res: Response) =>{
+    const commentUpdateParams: UpdateCommentType={
+        content: req.body.content
+    }
+    const commentId = req.params.id
+    const isUpdated = await CommentRepository.updateComment(commentId, commentUpdateParams)
+    if(isUpdated){
+        return res.sendStatus(204)
+    }else{
+        return  res.sendStatus(404)
+    }
+})
 
 commentRouter.delete('/:id',authMiddlewareBearer, async (req:Request,res:Response) =>{
     const isDeleted = await CommentRepository.deleteComment(req.params.id)
