@@ -1,5 +1,5 @@
 import {authMiddleware, authMiddlewareBearer} from "../middlewares/auth/auth-middleware";
-import {RequestWithBody, RequestWithParamsAndBody, RequestWithQuery} from "../types/common";
+import {RequestWithBody, RequestWithParamsAndBody, RequestWithQuery, RequestWithQueryAndParams} from "../types/common";
 import {Request, Response, Router} from "express";
 import {PostOutputType} from "../types/posts/output";
 import {CreateNewPostType, postQuerySortData, UpdatePostType} from "../types/posts/input";
@@ -12,6 +12,7 @@ import {CommentOutputType} from "../types/comment/output-comment-type";
 import {CreateNewCommentType} from "../types/comment/input-comment-type";
 import {CommentService} from "../domain/comment-service";
 import {QueryCommentRepository} from "../repositories/query-comment-repository";
+import {ObjectId} from "mongodb";
 
 
 export const postRoute = Router({})
@@ -28,6 +29,29 @@ postRoute.get('/:id', async (req:Request, res: Response)=>{
         res.status(200).send(postId)
     }else {
         res.sendStatus(404)
+    }
+})
+
+postRoute.get('/:postId/comments', async (req:RequestWithQueryAndParams<{ postId:string }, postQuerySortData>, res:Response)=> {
+    const postId = req.params.postId
+    const paginationData = paginator(req.query)
+
+    if(!ObjectId.isValid(postId)){
+        res.sendStatus(404)
+        return
+    }
+    try {
+        const comments = await QueryPostRepository.getAllCommentsForPost(postId, paginationData)
+        if(comments!.items.length>0){
+            res.status(200).send(comments)
+        }else{
+            res.sendStatus(404)
+        }
+
+    }
+    catch(error){
+        console.error("Error fetching comments for post:", error)
+        res.status(500).json({message: 'Internal server error'})
     }
 })
 

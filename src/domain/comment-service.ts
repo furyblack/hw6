@@ -1,6 +1,19 @@
-import {CommentMongoDbType} from "../types/comment/output-comment-type";
+import {CommentMongoDbType, CommentMongoDbTypeWithId, CommentOutputType} from "../types/comment/output-comment-type";
 import {CommentRepository} from "../repositories/comment-repository";
 import {PostRepository} from "../repositories/post-repository";
+
+
+
+export class CommentMapper{
+    static toDto(comment:CommentMongoDbTypeWithId):CommentOutputType{
+        return {
+            id: comment._id.toString(),
+            content: comment.content,
+            commentatorInfo:comment.commentatorInfo,
+            createdAt: comment.createdAt.toISOString()
+        }
+    }
+}
 
 type CreateCommentServiceType ={
     postId:string,
