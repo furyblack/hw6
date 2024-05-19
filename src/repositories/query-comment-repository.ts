@@ -1,7 +1,5 @@
-import {BlogMongoDbType, BlogOutputType} from "../types/blogs/output";
 import {ObjectId, WithId} from "mongodb";
-import {blogCollection, commentCollection} from "../db/db";
-import {BlogMapper} from "./blog-repository";
+import { commentCollection} from "../db/db";
 import {CommentMongoDbType, CommentOutputType} from "../types/comment/output-comment-type";
 import {CommentMapper} from "./comment-repository";
 

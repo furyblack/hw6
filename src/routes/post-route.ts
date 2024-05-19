@@ -10,7 +10,6 @@ import {paginator} from "../types/paginator/pagination";
 import {PaginationOutputType} from "../types/blogs/output";
 import {CommentOutputType} from "../types/comment/output-comment-type";
 import {CreateNewCommentType} from "../types/comment/input-comment-type";
-import {PostService} from "../domain/posts-service";
 import {CommentService} from "../domain/comment-service";
 import {QueryCommentRepository} from "../repositories/query-comment-repository";
 
