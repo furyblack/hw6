@@ -51,11 +51,9 @@ postRoute.get('/:postId/comments', async (req:RequestWithQueryAndParams<{ postId
     }
     try {
         const comments = await QueryPostRepository.getAllCommentsForPost(postId, paginationData)
-        // if(comments!.items.length>0){
-           res.status(200).send(comments)
-        // }else{
-        //     res.sendStatus(404)
-        // }
+
+        res.status(200).send(comments)
+
 
     }
     catch(error){
