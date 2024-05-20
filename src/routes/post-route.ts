@@ -35,18 +35,27 @@ postRoute.get('/:id', async (req:Request, res: Response)=>{
 postRoute.get('/:postId/comments', async (req:RequestWithQueryAndParams<{ postId:string }, postQuerySortData>, res:Response)=> {
     const postId = req.params.postId
     const paginationData = paginator(req.query)
-
     if(!ObjectId.isValid(postId)){
         res.sendStatus(404)
         return
     }
+    const foundPost = await PostRepository.findPostById(postId)
+    if(!foundPost){
+        res.sendStatus(404)
+        /**
+         * status - просто сетает сататус в запросе но не отправляет его
+        * send -  сетает тело запроса и отправляет ответ на фронт (если не указан статус будет отправлен дефолтный например 200)
+        * sendStatus просто их смесь ( укороченый синтаксис -> отправка пустого бади и статуса который укажешь )
+         */
+        return
+    }
     try {
         const comments = await QueryPostRepository.getAllCommentsForPost(postId, paginationData)
-        if(comments!.items.length>0){
-            res.status(200).send(comments)
-        }else{
-            res.sendStatus(404)
-        }
+        // if(comments!.items.length>0){
+           res.status(200).send(comments)
+        // }else{
+        //     res.sendStatus(404)
+        // }
 
     }
     catch(error){

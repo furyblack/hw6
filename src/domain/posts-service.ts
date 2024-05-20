@@ -1,15 +1,12 @@
 import {CreateNewPostType, UpdatePostType} from "../types/posts/input";
-import {PostOutputType, PostMongoDbType} from "../types/posts/output";
+import {PostMongoDbType, PostOutputType} from "../types/posts/output";
 import {PostRepository} from "../repositories/post-repository";
-import {CreateNewCommentType} from "../types/comment/input-comment-type";
-import {CommentOutputType} from "../types/comment/output-comment-type";
-import {CommentRepository} from "../repositories/comment-repository";
 
 
 export class PostMapper{
     static toDto(post:PostMongoDbType):PostOutputType{
         return {
-            id: post._id,
+            id: post._id.toString(),
             title: post.title,
             shortDescription: post.shortDescription,
             content: post.content,

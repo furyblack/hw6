@@ -25,20 +25,44 @@ commentRouter.put('/:id', authMiddlewareBearer, commentForPostValidation(), asyn
         content: req.body.content
     }
     const commentId = req.params.id
-    const isUpdated = await CommentRepository.updateComment(commentId, commentUpdateParams)
-    if(isUpdated){
-        return res.sendStatus(204)
-    }else{
-        return  res.sendStatus(404)
+
+    const userId = req.userDto._id
+
+    const foundComment = await CommentRepository.findById(commentId)
+    if( foundComment && foundComment?.commentatorInfo.userId.toString() !== userId.toString()){
+        return res.sendStatus(403)
     }
+    await CommentRepository.updateComment(commentId, commentUpdateParams)
+    //if(isUpdated){
+    if(!foundComment) return res.sendStatus(404)
+        return res.sendStatus(204)
+    // }else{
+    //     return  res.sendStatus(404)
+    // }
 })
 
 commentRouter.delete('/:id',authMiddlewareBearer, async (req:Request,res:Response) =>{
-    const isDeleted = await CommentRepository.deleteComment(req.params.id)
-    if(!isDeleted){
-        res.sendStatus(404)
-    }else {
-        res.sendStatus(204)
+
+    const commentId = req.params.id
+
+    const userId = req.userDto._id
+
+    const foundComment = await CommentRepository.findById(commentId)
+    if(foundComment && foundComment?.commentatorInfo.userId.toString() !== userId.toString()){
+        return res.sendStatus(403)
     }
+
+    await CommentRepository.deleteComment(commentId)
+    if(!foundComment) return res.sendStatus(404)
+     return res.sendStatus(204)
+
+
+
+    // const isDeleted = await CommentRepository.deleteComment(req.params.id)
+    // if(!isDeleted){
+    //     res.sendStatus(404)
+    // }else {
+    //     res.sendStatus(204)
+    // }
 })
 

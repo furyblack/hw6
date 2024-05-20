@@ -2,7 +2,7 @@ import {PostMongoDbType, PostOutputType, postSortData} from "../types/posts/outp
 import {commentCollection, postCollection} from "../db/db";
 import {PostMapper} from "../domain/posts-service";
 import {PaginationOutputType} from "../types/blogs/output";
-import {SortDirection} from "mongodb";
+import {ObjectId, SortDirection} from "mongodb";
 import {CommentMapper} from "../domain/comment-service";
 import {CommentOutputType} from "../types/comment/output-comment-type";
 
@@ -33,7 +33,7 @@ export class QueryPostRepository {
 
     }
     static async getAllCommentsForPost(postId:string, sortData:postSortData):Promise<PaginationOutputType<CommentOutputType[]>>{
-        const {pageSize, pageNumber, sortBy, sortDirection, searchNameTerm} = sortData
+        const {pageSize, pageNumber, sortBy, sortDirection} = sortData
         const search = {postId: postId}
         const post = await commentCollection
             .find(search)
@@ -57,7 +57,7 @@ export class QueryPostRepository {
 
 
     static async getById(id: string): Promise<PostOutputType | null> {
-        const post: PostMongoDbType | null = await postCollection.findOne({_id: id})
+        const post: PostMongoDbType | null = await postCollection.findOne({_id: new ObjectId(id)})
         if (!post) {
             return null
         }

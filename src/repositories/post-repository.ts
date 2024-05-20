@@ -1,17 +1,15 @@
-import { postCollection} from "../db/db";
-import { CreateNewPostType, UpdatePostType} from "../types/posts/input";
-import {PostOutputType, PostMongoDbType} from "../types/posts/output";
-import * as crypto from "crypto";
+import {postCollection} from "../db/db";
+import {CreateNewPostType, UpdatePostType} from "../types/posts/input";
+import {PostMongoDbType, PostOutputType} from "../types/posts/output";
 import {QueryPostRepository} from "./query-post-repository";
 import {QueryBlogRepository} from "./query-blog-repository";
-import {QueryCommentRepository} from "./query-comment-repository";
-import {WithId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
 
 
 export class PostMapper{
     static toDto(post:PostMongoDbType):PostOutputType{
         return {
-            id: post._id,
+            id: post._id.toString(),
             title: post.title,
             shortDescription: post.shortDescription,
             content: post.content,
@@ -30,14 +28,14 @@ export class PostRepository{
             return null
         }
         const newPost:PostMongoDbType ={
-            _id: crypto.randomUUID(),
+            _id: new ObjectId(),//crypto.randomUUID(),  //new ObjectId()//crypto.randomUUID(),
             title: postParams.title,
             shortDescription: postParams.shortDescription,
             content: postParams.content,
             blogId: postParams.blogId,
             blogName: targetBlog.name,
             createdAt: new Date()
-        }
+        } as unknown as PostMongoDbType
         await postCollection.insertOne(newPost)
 
 
@@ -50,17 +48,15 @@ export class PostRepository{
         if(!post){
             return null
         }
-        const updateResult = await postCollection.updateOne({_id:postId}, {$set:{...updateData}})
+        const updateResult = await postCollection.updateOne({_id: new ObjectId(postId)}, {$set:{...updateData}})
         const updatedCount = updateResult.modifiedCount
-        if(!updatedCount){
-            return false
-        }
-        return true
+        return Boolean(updatedCount);
+
     }
 
     static async deletePost(id: string): Promise<boolean>{
         try{
-            const result = await postCollection.deleteOne({_id:id})
+            const result = await postCollection.deleteOne({_id: new ObjectId(id)})
             return result.deletedCount === 1;
         }catch (error){
             console.error("Error deleting post", error)
@@ -70,7 +66,7 @@ export class PostRepository{
     }
 
     static async findPostById(postId:string):Promise<WithId<PostMongoDbType>|null>{
-        return postCollection.findOne({_id:postId})
+        return postCollection.findOne({_id: new ObjectId(postId)})
     }
 
 
